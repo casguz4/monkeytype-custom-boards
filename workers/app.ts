@@ -16,6 +16,20 @@ const requestHandler = createRequestHandler(
 
 export default {
   fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/api")) {
+      const { pathname } = url;
+      const [_, route] = pathname.split("/api/");
+      switch (route) {
+        case "board":
+          return new Response(
+            JSON.stringify({ message: "called the board api route!" }),
+            { status: 200 },
+          );
+        default:
+          return new Response("Not Found", { status: 404 });
+      }
+    }
     return requestHandler(request, {
       cloudflare: { env, ctx },
     });

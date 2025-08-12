@@ -50,10 +50,6 @@ export default function UsernameFieldArrayForm({
     ]);
     console.log("searchParams:", params);
     setSearchParams(params);
-    // setSearchParams(new URLSearchParams(validUsernames.join(",")));
-    // alert(
-    //   `Submitted ${validUsernames.length} usernames: ${validUsernames.join(", ")}`,
-    // );
   };
 
   return (

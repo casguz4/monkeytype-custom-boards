@@ -1,11 +1,10 @@
 import { Outlet, NavLink } from "react-router";
-import { Switch } from "~/components/ui/switch";
 
 const TITLE = "Monkey Type Custom Boards";
 export default function Layout() {
   return (
     <div>
-      <header className="h-full max-h-[1vh] mb-2 flex justify-between">
+      <header className="h-full mb-2 flex justify-between">
         <nav>
           <ul className="flex space-x-4 lg:space-x-8">
             <li>
@@ -16,18 +15,13 @@ export default function Layout() {
             </li>
           </ul>
         </nav>
-        <div>
-          {/* theme toggle switch */}
-          <Switch id="theme-toggle" />
-        </div>
+        <div>{/* theme toggle switch */}</div>
       </header>
-      <div className="m-2">
-        <main className="flex flex-col w-full items-center min-h-screen pt-8 lg:pt-24">
-          <Outlet />
-        </main>
-      </div>
+      <main className="flex flex-col w-full min-h-screen">
+        <Outlet />
+      </main>
       <footer className="bg-gray-800 text-white p-4">
-        <p>
+        <p className="text-center">
           &copy; {new Date().getFullYear()} {TITLE}
         </p>
       </footer>
