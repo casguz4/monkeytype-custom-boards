@@ -30,6 +30,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2250%22>👑</text></svg>" />
         <Meta />
         <Links />
       </head>
@@ -66,7 +67,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     <main className="pt-16 p-4 container mx-auto">
       <h1>{message}</h1>
       <p>{details}</p>
-      {stack && (
+      {import.meta.env.NODE_ENV !== 'production' && stack && (
         <pre className="w-full p-4 overflow-x-auto">
           <code>{stack}</code>
         </pre>
