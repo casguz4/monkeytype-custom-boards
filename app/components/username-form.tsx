@@ -1,5 +1,6 @@
 import { Plus, X } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 
 import { Button } from "./ui/button";
 import {
@@ -82,6 +83,29 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
                           message:
                             "Username can only contain letters, numbers, hyphens, and underscores",
                         },
+                        validate: {
+                          userExists: async (value) => {
+                            const DNE = `The username ${value} does not exist`;
+                            try {
+                              const response = await fetch(
+                                `https://api.monkeytype.com/users/${value}/profile?isUid=false`
+                              );
+                              if (!response.ok) {
+                                return DNE;
+                              }
+                              const data = (await response.json()) as {
+                                data: UserProfile;
+                                message: string;
+                              };
+                              if (!data.data.uid) {
+                                return data.message;
+                              }
+                              return true;
+                            } catch {
+                              return DNE;
+                            }
+                          },
+                        },
                       })}
                       placeholder={`Username ${index + 1}`}
                       className="w-full"
@@ -120,6 +144,9 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
             <Button type="submit" className="w-full">
               Submit Usernames
             </Button>
+            <div className="hidden">
+              <DevTool control={control} />
+            </div>
           </form>
         </CardContent>
       </Card>
