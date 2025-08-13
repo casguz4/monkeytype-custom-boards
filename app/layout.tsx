@@ -6,14 +6,7 @@ export default function Layout() {
     <div>
       <header className="h-full mb-2 flex justify-between">
         <nav>
-          <ul className="flex space-x-4 lg:space-x-8">
-            <li>
-              <NavLink to="/">Monkey Type Custom Boards</NavLink>
-            </li>
-            <li>
-              <NavLink to="/boards">Leader Boards</NavLink>
-            </li>
-          </ul>
+          <NavLink to="/">Monkey Type Custom Boards</NavLink>
         </nav>
         <div>{/* theme toggle switch */}</div>
       </header>

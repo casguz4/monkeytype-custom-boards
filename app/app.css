@@ -18,15 +18,11 @@ body {
     }
 }
 a.active {
-    color: red;
+    color: cornflowerblue;
 }
 
 a.pending {
     animate: pulse 1s infinite;
-}
-
-a.transitioning {
-    /* css transition is running */
 }
 
 @theme inline {
