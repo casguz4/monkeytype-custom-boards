@@ -19,10 +19,7 @@ interface Props {
   usernames: { value: string }[];
   setSearchParams: (params: URLSearchParams | string) => void;
 }
-export default function UsernameFieldArrayForm({
-  usernames,
-  setSearchParams,
-}: Props) {
+export function UsernameForm({ usernames, setSearchParams }: Props) {
   const {
     control,
     handleSubmit,
@@ -30,7 +27,7 @@ export default function UsernameFieldArrayForm({
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
-      usernames: [{ value: "" }],
+      usernames: usernames ?? [{ value: "" }],
     },
   });
 
@@ -53,7 +50,7 @@ export default function UsernameFieldArrayForm({
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+    <div className="p-4 flex items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="font-sans">Username Entry Form</CardTitle>

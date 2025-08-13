@@ -1,14 +1,56 @@
 import { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import type { Route } from "./+types/boards";
-import UsernameForm from "~/components/username-form";
-
+import { UsernameForm } from "~/components/username-form";
+import { RankingTabs } from "~/components/ranking-tabs";
+import { TypingDataGrid } from "~/components/typing-data-grid";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Boards" },
     { description: "Manage create, view, and manage boards" },
   ];
 }
+
+const useFetchBoardsByUsernameList = (usernames: { value: string }[]) => {
+  const [data, setData] = useState<any>([]);
+  const [status, setStatus] = useState<"loading" | "success" | "error" | null>(
+    null,
+  );
+
+  const fetchBoards = async () => {
+    setStatus("loading");
+    try {
+      const data = await Promise.all(
+        usernames.map(async ({ value: username }) => {
+          const response = await fetch(
+            `https://api.monkeytype.com/users/${username}/profile?isUid=false`,
+          );
+          const data = (await response.json()) as {
+            data: Record<string, unknown>;
+          };
+          return data?.data;
+        }),
+      );
+      console.log("fetched data: ", data);
+      setData(data);
+      setStatus("success");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
+  useEffect(() => {
+    fetchBoards();
+  }, [usernames]);
+
+  return {
+    data,
+    isLoading: status === "loading",
+    error: status === "error",
+    success: status === "success",
+    refetch: fetchBoards,
+  };
+};
 
 export default function Boards() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,19 +63,15 @@ export default function Boards() {
       return [];
     }
   }, [searchParams]);
-
-  const showTable = usernames?.length > 0;
-  console.log("usernames: ", usernames);
+  const { data, isLoading, error } = useFetchBoardsByUsernameList(usernames);
+  console.log(data);
   return (
-    <>
+    <section>
       <UsernameForm setSearchParams={setSearchParams} usernames={usernames} />
-      {showTable && (
-        <div>
-          <pre>
-            <code>{JSON.stringify(usernames, null, 2)}</code>
-          </pre>
-        </div>
+      <div className="mb-15"></div>
+      {!!data.length && !error && !isLoading && (
+        <TypingDataGrid sampleData={data} />
       )}
-    </>
+    </section>
   );
 }

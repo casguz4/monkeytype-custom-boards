@@ -17,7 +17,7 @@ export default function Layout() {
         </nav>
         <div>{/* theme toggle switch */}</div>
       </header>
-      <main className="flex flex-col w-full min-h-screen">
+      <main className="flex flex-col w-full min-h-screen px-10 pb-25">
         <Outlet />
       </main>
       <footer className="bg-gray-800 text-white p-4">
