@@ -1,10 +1,22 @@
 "use client";
 
+import {
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Search,
+  Filter,
+  Crown,
+  Zap,
+  Target,
+  Clock,
+} from "lucide-react";
 import { useState, useMemo } from "react";
+
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { Badge } from "~/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -20,151 +32,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Search,
-  Filter,
-  Crown,
-  Zap,
-  Target,
-  Clock,
-} from "lucide-react";
-
-// Sample data - replace with your actual data
-const sampleData = [
-  {
-    name: "casguz4",
-    addedAt: 1736017785044,
-    typingStats: {
-      completedTests: 24,
-      startedTests: 27,
-      timeTyping: 773.77,
-    },
-    personalBests: {
-      time: {
-        "15": [
-          {
-            acc: 90.52,
-            consistency: 71.49,
-            difficulty: "normal",
-            lazyMode: false,
-            language: "english",
-            punctuation: false,
-            raw: 83.18,
-            wpm: 83.18,
-            numbers: false,
-            timestamp: 1749245753189,
-          },
-        ],
-        "30": [
-          {
-            acc: 95.8,
-            consistency: 79.69,
-            difficulty: "normal",
-            lazyMode: false,
-            language: "english",
-            punctuation: false,
-            raw: 91.18,
-            wpm: 89.99,
-            numbers: false,
-            timestamp: 1745265868925,
-          },
-          {
-            acc: 92.5,
-            consistency: 65.08,
-            difficulty: "normal",
-            lazyMode: false,
-            language: "english",
-            punctuation: false,
-            raw: 73.59,
-            wpm: 73.59,
-            numbers: true,
-            timestamp: 1736110291321,
-          },
-        ],
-      },
-      words: {},
-    },
-    xp: 1873,
-    streak: 1,
-    maxStreak: 2,
-    isPremium: false,
-    allTimeLbs: {
-      time: {
-        "15": {},
-        "60": {},
-      },
-    },
-    uid: "JGfM0yjn70elnOjOM4vO9h3A6Po1",
-  },
-  {
-    name: "stephansama",
-    addedAt: 1724454466307,
-    typingStats: {
-      completedTests: 171,
-      startedTests: 173,
-      timeTyping: 4948.49000000001,
-    },
-    personalBests: {
-      time: {
-        "15": [
-          {
-            acc: 95.18,
-            consistency: 63.95,
-            difficulty: "normal",
-            lazyMode: false,
-            language: "english",
-            punctuation: false,
-            raw: 63.18,
-            wpm: 63.18,
-            numbers: false,
-            timestamp: 1724454471635,
-          },
-        ],
-        "30": [
-          {
-            acc: 95.95,
-            consistency: 75.68,
-            difficulty: "normal",
-            lazyMode: false,
-            language: "english",
-            punctuation: false,
-            raw: 87.19,
-            wpm: 84.79,
-            numbers: false,
-            timestamp: 1727356666135,
-          },
-          {
-            acc: 89.9,
-            consistency: 49.92,
-            difficulty: "normal",
-            lazyMode: false,
-            language: "code_javascript_1k",
-            punctuation: false,
-            raw: 35.19,
-            wpm: 35.19,
-            numbers: false,
-            timestamp: 1724455260710,
-          },
-        ],
-      },
-      words: {},
-    },
-    xp: 18020,
-    streak: 1,
-    maxStreak: 4,
-    isPremium: false,
-    allTimeLbs: {
-      time: {
-        "15": {},
-        "60": {},
-      },
-    },
-    uid: "x9RZAACq15MADNQyX5g2SUV6VOq2",
-  },
-];
 
 type SortField =
   | "name"
@@ -230,7 +97,7 @@ export function TypingDataGrid({ sampleData }: { sampleData: UserProfile[] }) {
         uid: user.uid,
       } as ProcessedUser;
     });
-  }, []);
+  }, [sampleData]);
 
   // Filter and sort data
   const filteredAndSortedData = useMemo(() => {

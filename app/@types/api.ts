@@ -17,7 +17,7 @@ type TimeStats = {
 };
 type Time = Record<"15" | "30" | "60" | "120", TimeStats[]>;
 type Words = Record<"10" | "25" | "50" | "100", TimeStats[] | []>;
-type UserProfile = {
+export type UserProfile = {
   name: string;
   addedAt: number;
   typingStats: TypingStats;
