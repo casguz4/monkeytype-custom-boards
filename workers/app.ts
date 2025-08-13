@@ -10,8 +10,9 @@ declare module "react-router" {
 }
 
 const requestHandler = createRequestHandler(
+  // eslint-disable-next-line import/no-unresolved
   () => import("virtual:react-router/server-build"),
-  import.meta.env.MODE,
+  import.meta.env.MODE
 );
 
 export default {
@@ -24,7 +25,7 @@ export default {
         case "board":
           return new Response(
             JSON.stringify({ message: "called the board api route!" }),
-            { status: 200 },
+            { status: 200 }
           );
         default:
           return new Response("Not Found", { status: 404 });

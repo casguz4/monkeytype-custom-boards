@@ -1,6 +1,9 @@
+import { DevTool } from "@hookform/devtools";
+import { Plus, X } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { debounce } from "lodash";
+
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import {
   Card,
   CardContent,
@@ -8,8 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Plus, X } from "lucide-react";
 
 type FormData = {
   usernames: { value: string }[];
@@ -37,15 +40,16 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
   });
 
   const onSubmit = (data: FormData) => {
-    const validUsernames = data.usernames
-      .map((item) => item.value.trim())
-      .filter((username) => username.length > 0);
-
-    console.log("Submitted usernames:", validUsernames);
+    const validUsernames = [
+      ...new Set( // remove duplicates
+        data.usernames
+          .map((item) => item.value.trim())
+          .filter((username) => username.length > 0)
+      ),
+    ];
     const params = new URLSearchParams([
       ["users", JSON.stringify(validUsernames)],
     ]);
-    console.log("searchParams:", params);
     setSearchParams(params);
   };
 
@@ -79,6 +83,29 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
                           value: /^[a-zA-Z0-9_-]+$/,
                           message:
                             "Username can only contain letters, numbers, hyphens, and underscores",
+                        },
+                        validate: {
+                          userExists: debounce(async (value) => {
+                            const DNE = `The username ${value} does not exist`;
+                            try {
+                              const response = await fetch(
+                                `https://api.monkeytype.com/users/${value.trim()}/profile?isUid=false`
+                              );
+                              if (!response.ok) {
+                                return DNE;
+                              }
+                              const data = (await response.json()) as {
+                                data: UserProfile;
+                                message: string;
+                              };
+                              if (!data.data.uid) {
+                                return data.message;
+                              }
+                              return true;
+                            } catch {
+                              return DNE;
+                            }
+                          }, 500),
                         },
                       })}
                       placeholder={`Username ${index + 1}`}
@@ -118,6 +145,9 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
             <Button type="submit" className="w-full">
               Submit Usernames
             </Button>
+            <div className="hidden">
+              <DevTool control={control} />
+            </div>
           </form>
         </CardContent>
       </Card>
