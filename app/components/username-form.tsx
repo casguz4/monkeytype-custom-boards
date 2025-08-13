@@ -1,6 +1,7 @@
+import { DevTool } from "@hookform/devtools";
 import { Plus, X } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
+import { debounce } from "lodash";
 
 import { Button } from "./ui/button";
 import {
@@ -84,11 +85,11 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
                             "Username can only contain letters, numbers, hyphens, and underscores",
                         },
                         validate: {
-                          userExists: async (value) => {
+                          userExists: debounce(async (value) => {
                             const DNE = `The username ${value} does not exist`;
                             try {
                               const response = await fetch(
-                                `https://api.monkeytype.com/users/${value}/profile?isUid=false`
+                                `https://api.monkeytype.com/users/${value.trim()}/profile?isUid=false`
                               );
                               if (!response.ok) {
                                 return DNE;
@@ -104,7 +105,7 @@ export function UsernameForm({ usernames, setSearchParams }: Props) {
                             } catch {
                               return DNE;
                             }
-                          },
+                          }, 500),
                         },
                       })}
                       placeholder={`Username ${index + 1}`}
