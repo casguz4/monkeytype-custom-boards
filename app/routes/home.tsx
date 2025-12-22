@@ -1,8 +1,14 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
-import { useSearchParams } from "react-router";
+import { ArrowLeft, Github } from 'lucide-react';
+import { useState } from 'react';
 
-import { TypingDataGrid } from "~/components/typing-data-grid";
-import { UsernameForm } from "~/components/username-form";
+import { ComparisonHighlights } from '~/components/ComparisonHighlights';
+import { LoadingState } from '~/components/LoadingState';
+import { Button } from '~/components/ui/button';
+
+import { StatsGrid } from '~/components/StatsGrid';
+import { Toaster } from '~/components/ui/sonner';
+import { UserInputForm } from '~/components/UserInputForm';
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function meta() {
@@ -54,26 +60,109 @@ const useFetchBoardsByUsernameList = (usernames: { value: string }[]) => {
   };
 };
 
+
+
+
+
+interface UserStats {
+  username: string;
+  wpm: number;
+  accuracy: number;
+  testsCompleted: number;
+  bestWpm: number;
+  timeTyping: string;
+}
+
 export default function Home() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const usernames = useMemo(() => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [stats, setStats] = useState<UserStats[] | null>(null);
+
+  // Mock API call - in production this would fetch from MonkeyType API
+  const fetchUserStats = async (users: string[]): Promise<UserStats[]> => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Mock data generator
+    return users.map(username => {
+      const seed = username.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const random = (min: number, max: number, offset: number = 0) => {
+        const seeded = Math.sin(seed + offset) * 10000;
+        return Math.floor(min + (seeded - Math.floor(seeded)) * (max - min));
+      };
+
+      return {
+        username,
+        wpm: random(45, 120, 1),
+        accuracy: random(85, 99, 2),
+        testsCompleted: random(50, 2500, 3),
+        bestWpm: random(80, 150, 4),
+        timeTyping: `${random(10, 500, 5)}h`,
+      };
+    });
+  };
+
+  const handleCompare = async (users: string[]) => {
+    setIsLoading(true);
     try {
-      const users = JSON.parse(searchParams.get("users") || "[]");
-      return users.map((user: string) => ({ value: user.toLowerCase() }));
+      const userStats = await fetchUserStats(users);
+      setStats(userStats);
+      toast.success(`Loaded stats for ${users.length} users!`, {
+        description: 'Check out who\'s the typing champion 🏆',
+      });
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return [];
+      toast.error('Failed to load stats', {
+        description: 'Please try again',
+      });
+    } finally {
+      setIsLoading(false);
     }
-  }, [searchParams]);
-  const { data, isLoading, error } = useFetchBoardsByUsernameList(usernames);
+  };
+
+  const handleReset = () => {
+    setStats(null);
+  };
+
   return (
-    <section>
-      <UsernameForm setSearchParams={setSearchParams} usernames={usernames} />
-      <div className="mb-15"></div>
-      {!!data.length && !error && !isLoading && (
-        <TypingDataGrid sampleData={data} />
-      )}
-    </section>
+      <main className="container mx-auto px-4 py-12">
+        {!stats ? (
+          <div className="max-w-4xl mx-auto">
+            <UserInputForm onCompare={handleCompare} isLoading={isLoading} />
+            {isLoading && <LoadingState />}
+          </div>
+        ) : (
+          <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4">
+            <div className="flex items-center justify-between">
+              <Button
+                variant="ghost"
+                onClick={handleReset}
+                className="gap-2"
+              >
+                <ArrowLeft className="size-4" />
+                New Comparison
+              </Button>
+            </div>
+
+            <ComparisonHighlights stats={stats} />
+            <StatsGrid stats={stats} />
+
+            {/* Fun footer message */}
+            <div className="text-center py-8">
+              <p className="text-muted-foreground text-sm">
+                Want to improve your score? Practice on{' '}
+                <a
+                  href="https://monkeytype.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-600 hover:underline"
+                >
+                  MonkeyType.com
+                </a>
+                {' '}🐵
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
   );
 }
+
