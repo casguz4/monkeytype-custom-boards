@@ -1,11 +1,11 @@
-import { ArrowLeft, Github } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { ComparisonHighlights } from "~/components/ComparisonHighlights";
 import { LoadingState } from "~/components/LoadingState";
 import { StatsGrid } from "~/components/StatsGrid";
 import { Button } from "~/components/ui/button";
-import { Toaster } from "~/components/ui/sonner";
 import { UserInputForm } from "~/components/UserInputForm";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -66,32 +66,27 @@ interface UserStats {
   bestWpm: number;
   timeTyping: string;
 }
-
-  const BASE_URL = "https://api.monkeytype.com/users/";
+const BASE_URL = "https://api.monkeytype.com/users/";
 class MTUserClient {
+  private async fetchProfile(name: string) {
+    const response = await fetch(
+      `${BASE_URL}${encodeURIComponent(name)}/profile?isUid=false`
+    );
 
-  async getByUserName(name: string) {
-    const res = await fetch(BASE_URL + `${name}/profile?isUid=false`);
-    const data = await res.json();
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${name}: ${response.status}`);
+    }
+
+    const { data } = (await response.json()) as { data: UserProfile };
     return data;
   }
 
+  async getByUserName(name: string) {
+    return this.fetchProfile(name);
+  }
+
   async getByUserList(names: Array<string>) {
-    const fetchNames = names.map((n) => {
-      return fetch(BASE_URL + `${n}/profile?isUid=false`);
-    });
-    const responses = await Promise.all(fetchNames);
-    const results = Promise.all(responses.map(async res => {
-      return (await res.json());
-    }));
-    const data = results.map((res) => {
-      debugger;
-      return {
-        ...res.data
-      }
-    })
-    debugger;
-    return data;
+    return Promise.all(names.map((n) => this.fetchProfile(n)));
   }
 }
 const mtClient = new MTUserClient();
@@ -100,30 +95,37 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState<UserStats[] | null>(null);
 
-  // Mock API call - in production this would fetch from MonkeyType API
   const fetchUserStats = async (users: string[]): Promise<UserStats[]> => {
-    const stats = mtClient.getByUserList(users);
-    console.log("stats: ", stats);
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const profiles = await mtClient.getByUserList(users);
 
-    // Mock data generator
-    return users.map((username) => {
-      const seed = username
-        .split("")
-        .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const random = (min: number, max: number, offset: number = 0) => {
-        const seeded = Math.sin(seed + offset) * 10000;
-        return Math.floor(min + (seeded - Math.floor(seeded)) * (max - min));
-      };
+    const formatTimeTyping = (seconds: number) => {
+      const hours = seconds / 3600;
+      if (hours >= 1) {
+        return `${hours.toFixed(1)}h`;
+      }
+      const minutes = Math.max(Math.round(seconds / 60), 1);
+      return `${minutes}m`;
+    };
+
+    const bestPerformance = (profile: UserProfile) => {
+      const timeEntries = Object.values(profile.personalBests.time ?? {}).flat();
+      const wordEntries = Object.values(profile.personalBests.words ?? {}).flat();
+      const all = [...timeEntries, ...wordEntries];
+      return [...all].sort((a, b) => b.wpm - a.wpm)[0];
+    };
+
+    return profiles.map((profile) => {
+      const best = bestPerformance(profile);
+      const wpm = Math.round(best?.wpm ?? 0);
+      const accuracy = Number(((best?.acc ?? 0)).toFixed(2));
 
       return {
-        username,
-        wpm: random(45, 120, 1),
-        accuracy: random(85, 99, 2),
-        testsCompleted: random(50, 2500, 3),
-        bestWpm: random(80, 150, 4),
-        timeTyping: `${random(10, 500, 5)}h`,
+        username: profile.name,
+        wpm,
+        accuracy: Number.isFinite(accuracy) ? accuracy : 0,
+        testsCompleted: profile.typingStats.completedTests,
+        bestWpm: wpm,
+        timeTyping: formatTimeTyping(profile.typingStats.timeTyping),
       };
     });
   };
