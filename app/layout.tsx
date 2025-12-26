@@ -51,7 +51,7 @@ export default function Layout() {
       </div>
       <footer className="bg-gray-800 text-white p-4">
         <p className="text-center">
-          &copy; {new Date().getFullYear()} {TITLE}
+          &copy; {new Date().getFullYear()} {TITLE} by <a href="https://cg4.dev" target="_blank" rel="noreferrer noopener">cg4.dev</a>
         </p>
       </footer>
     </div>
