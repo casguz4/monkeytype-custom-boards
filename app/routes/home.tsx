@@ -7,6 +7,7 @@ import { LoadingState } from "~/components/LoadingState";
 import { StatsGrid } from "~/components/StatsGrid";
 import { Button } from "~/components/ui/button";
 import { UserInputForm } from "~/components/UserInputForm";
+import { UserStatsDataGrid } from "~/components/UserStatsDataGrid";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function meta() {
@@ -94,9 +95,11 @@ const mtClient = new MTUserClient();
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState<UserStats[] | null>(null);
+  const [profiles, setProfiles] = useState<UserProfile[] | null>(null);
 
   const fetchUserStats = async (users: string[]): Promise<UserStats[]> => {
     const profiles = await mtClient.getByUserList(users);
+    setProfiles(profiles);
 
     const formatTimeTyping = (seconds: number) => {
       const hours = seconds / 3600;
@@ -149,6 +152,7 @@ export default function Home() {
 
   const handleReset = () => {
     setStats(null);
+    setProfiles(null);
   };
 
   return (
@@ -169,6 +173,7 @@ export default function Home() {
 
           <ComparisonHighlights stats={stats} />
           <StatsGrid stats={stats} />
+          {profiles && <UserStatsDataGrid profiles={profiles} />}
 
           {/* Fun footer message */}
           <div className="text-center py-8">
