@@ -1,9 +1,9 @@
-import { X, Plus, Zap } from 'lucide-react';
-import { useState, type KeyboardEvent } from 'react';
+import { X, Plus, Zap } from "lucide-react";
+import { useState, type KeyboardEvent } from "react";
 
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 interface UserInputFormProps {
   onCompare: (users: string[]) => void;
@@ -11,40 +11,40 @@ interface UserInputFormProps {
 }
 
 export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [users, setUsers] = useState<string[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const addUser = () => {
     const trimmedValue = inputValue.trim();
-    
+
     if (!trimmedValue) {
-      setError('Please enter a username');
+      setError("Please enter a username");
       return;
     }
-    
+
     if (users.includes(trimmedValue)) {
-      setError('User already added');
+      setError("User already added");
       return;
     }
-    
+
     if (users.length >= 5) {
-      setError('Maximum 5 users for comparison');
+      setError("Maximum 5 users for comparison");
       return;
     }
-    
+
     setUsers([...users, trimmedValue]);
-    setInputValue('');
-    setError('');
+    setInputValue("");
+    setError("");
   };
 
   const removeUser = (userToRemove: string) => {
-    setUsers(users.filter(user => user !== userToRemove));
-    setError('');
+    setUsers(users.filter((user) => user !== userToRemove));
+    setError("");
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Tab") {
       e.preventDefault();
       addUser();
     }
@@ -52,7 +52,7 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
 
   const handleCompare = () => {
     if (users.length < 2) {
-      setError('Add at least 2 users to compare');
+      setError("Add at least 2 users to compare");
       return;
     }
     onCompare(users);
@@ -63,7 +63,9 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
       <div className="text-center space-y-2">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full border border-purple-500/20">
           <Zap className="size-4 text-purple-500" />
-          <span className="text-sm text-purple-600">Type Fast. Compare Faster.</span>
+          <span className="text-sm text-purple-600">
+            Type Fast. Compare Faster.
+          </span>
         </div>
         <h1 className="text-5xl">⌨️ MonkeyType Battle</h1>
         <p className="text-muted-foreground">
@@ -78,7 +80,7 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
             value={inputValue}
             onChange={(e) => {
               setInputValue(e.target.value);
-              setError('');
+              setError("");
             }}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
@@ -135,13 +137,15 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
           ) : (
             <>
               <Zap className="size-4 mr-2" />
-              Compare {users.length} User{users.length !== 1 ? 's' : ''}
+              Compare {users.length} User{users.length !== 1 ? "s" : ""}
             </>
           )}
         </Button>
 
         <p className="text-xs text-center text-muted-foreground">
-          Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs">Enter</kbd> to add users quickly
+          Press{" "}
+          <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs">Tab</kbd> to
+          add users quickly
         </p>
       </div>
     </div>
