@@ -47,6 +47,9 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
     if (e.key === "Tab") {
       e.preventDefault();
       addUser();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      onCompare(users);
     }
   };
 
@@ -59,7 +62,14 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleCompare();
+      }}
+      className="w-full max-w-2xl mx-auto space-y-6"
+    >
       <div className="text-center space-y-2">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full border border-purple-500/20">
           <Zap className="size-4 text-purple-500" />
@@ -125,7 +135,7 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
         )}
 
         <Button
-          onClick={handleCompare}
+          type="submit"
           disabled={users.length < 2 || isLoading}
           className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
           size="lg"
@@ -148,6 +158,6 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
           add users quickly
         </p>
       </div>
-    </div>
+    </form>
   );
 }
