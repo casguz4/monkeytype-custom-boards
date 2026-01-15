@@ -8,14 +8,15 @@
         "check": "pnpm run typecheck && react-router build && wrangler deploy --dry-run",
         "deploy": "wrangler deploy",
         "dev": "react-router dev",
-        "lint": "oxlint --type-aware --type-check --report-unused-disable-directives --max-warnings 0",
-        "lint:fix": "pnpm run lint --fix",
-        "preview": "pnpm run build && vite preview",
-        "typecheck": "pnpm run cf-typegen && pnpm run lint",
-        "prepare": "node .husky/install.mjs",
         "format": "oxfmt",
         "format:check": "oxfmt --check",
-        "format:fix": "oxmft --fix"
+        "format:fix": "oxmft --fix",
+        "gen:readme": "auto-readme -g ./README.md",
+        "lint": "oxlint --type-aware --type-check --report-unused-disable-directives --max-warnings 0",
+        "lint:fix": "pnpm run lint --fix",
+        "prepare": "node .husky/install.mjs",
+        "preview": "pnpm run build && vite preview",
+        "typecheck": "pnpm run cf-typegen && pnpm run lint"
     },
     "dependencies": {
         "@radix-ui/react-label": "^2.1.7",
