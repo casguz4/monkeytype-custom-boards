@@ -1,13 +1,13 @@
 {
-  "extends": "./tsconfig.json",
-  "include": ["tailwind.config.ts", "vite.config.ts"],
-  "compilerOptions": {
-    "composite": true,
-    "strict": true,
-    "types": ["node"],
-    "lib": ["ES2023"],
-    "target": "ES2023",
-    "module": "ESNEXT",
-    "moduleResolution": "bundler"
-  }
+    "extends": "./tsconfig.json",
+    "include": ["tailwind.config.ts", "vite.config.ts"],
+    "compilerOptions": {
+        "composite": true,
+        "strict": true,
+        "types": ["node"],
+        "lib": ["ES2023"],
+        "target": "ES2023",
+        "module": "ESNEXT",
+        "moduleResolution": "bundler"
+    }
 }
