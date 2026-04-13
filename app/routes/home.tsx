@@ -129,15 +129,15 @@ export default function Home() {
     };
 
     return (
-        <main className=''>
+        <main className='container mx-auto px-4 py-12'>
             {!stats ? (
-                <div className=''>
+                <div className='max-w-4xl mx-auto'>
                     <UserInputForm onCompare={handleCompare} isLoading={isLoading} />
                     {isLoading && <LoadingState />}
                 </div>
             ) : (
-                <div className=''>
-                    <div className=''>
+                <div className='max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4'>
+                    <div className='flex items-center justify-between'>
                         <Button variant='ghost' onClick={handleReset} className='gap-2'>
                             <ArrowLeft className='size-4' />
                             New Comparison
@@ -149,10 +149,15 @@ export default function Home() {
                     {profiles && <UserStatsDataGrid profiles={profiles} />}
 
                     {/* Fun footer message */}
-                    <div className=''>
-                        <p className=''>
+                    <div className='text-center py-8'>
+                        <p className='text-sm text-muted-foreground'>
                             Want to improve your score? Practice on{' '}
-                            <a href='https://monkeytype.com' target='_blank' rel='noopener noreferrer' className=''>
+                            <a
+                                href='https://monkeytype.com'
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='text-purple-600 hover:underline'
+                            >
                                 MonkeyType.com
                             </a>{' '}
                             🐵

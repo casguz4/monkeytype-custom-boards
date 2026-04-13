@@ -61,7 +61,7 @@ export function ComparisonHighlights({ stats }: ComparisonHighlightsProps) {
     ];
 
     return (
-        <div className=''>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
             {highlights.map((highlight, index) => {
                 const Icon = highlight.icon;
                 return (
@@ -71,15 +71,15 @@ export function ComparisonHighlights({ stats }: ComparisonHighlightsProps) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                     >
-                        <Card className={` ${highlight.bgColor} ${highlight.borderColor}`}>
-                            <div className=''>
-                                <div className={` ${highlight.color}`}>
-                                    <Icon className='' />
+                        <Card className={`p-4 ${highlight.bgColor} ${highlight.borderColor}`}>
+                            <div className='flex items-start gap-3'>
+                                <div className={`p-2 rounded-lg bg-gradient-to-br ${highlight.color}`}>
+                                    <Icon className='size-5 text-white' />
                                 </div>
-                                <div className=''>
-                                    <p className=''>{highlight.title}</p>
+                                <div className='flex-1 min-w-0'>
+                                    <p className='text-xs text-muted-foreground mb-1'>{highlight.title}</p>
                                     <p className='truncate'>{highlight.winner}</p>
-                                    <p className=''>{highlight.value}</p>
+                                    <p className='text-sm text-muted-foreground'>{highlight.value}</p>
                                 </div>
                             </div>
                         </Card>

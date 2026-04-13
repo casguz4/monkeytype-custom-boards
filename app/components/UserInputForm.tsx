@@ -78,19 +78,19 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
                 e.stopPropagation();
                 handleCompare();
             }}
-            className=''
+            className='w-full max-w-2xl mx-auto space-y-6'
         >
-            <div className=''>
-                <div className=''>
-                    <Zap className='' />
-                    <span className=''>Type Fast. Compare Faster.</span>
+            <div className='text-center space-y-2'>
+                <div className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-300/10 to-blue-600/10 rounded-full border border-blue-500/20'>
+                    <Zap className='size-4 text-blue-500' />
+                    <span className='text-sm text-blue-600'>Type Fast. Compare Faster.</span>
                 </div>
                 <h1 className='text-5xl'>⌨️ MonkeyType Battle</h1>
                 <p className='text-muted-foreground'>See who&apos;s the fastest monkey in the jungle</p>
             </div>
 
-            <div className=''>
-                <div className=''>
+            <div className='space-y-4 p-6 rounded-lg border bg-card'>
+                <div className='flex gap-2'>
                     <Input
                         placeholder='Enter username (e.g., rocket, casguz4)'
                         value={inputValue}
@@ -107,25 +107,29 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
                         disabled={isLoading || users.length >= 5}
                         variant='outline'
                         size='icon'
-                        className=''
+                        className='min-h-11 min-w-11 sm:min-h-9 sm:min-w-9'
                     >
-                        <Plus className='' />
+                        <Plus className='size-5 sm:size-4' />
                     </Button>
                 </div>
 
-                {error && <p className=''>{error}</p>}
+                {error && <p className='text-sm text-red-500 animate-in fade-in slide-in-from-top-1'>{error}</p>}
 
                 {users.length > 0 && (
-                    <div className=''>
+                    <div className='flex flex-wrap gap-2'>
                         {users.map((user, index) => (
                             <Badge
                                 key={user}
                                 variant='secondary'
-                                className=''
+                                className='pl-3 pr-2 py-1.5 text-sm animate-in fade-in zoom-in'
                                 style={{ animationDelay: `${index * 50}ms` }}
                             >
                                 <span>{user}</span>
-                                <button onClick={() => removeUser(user)} className='' disabled={isLoading}>
+                                <button
+                                    onClick={() => removeUser(user)}
+                                    className='ml-2 hover:bg-destructive/20 rounded-full p-0.5 transition-colors'
+                                    disabled={isLoading}
+                                >
                                     <X className='size-3' />
                                 </button>
                             </Badge>
@@ -133,25 +137,31 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
                     </div>
                 )}
 
-                <Button type='submit' disabled={!users.length || isLoading} className='' size='lg'>
+                <Button
+                    type='submit'
+                    disabled={!users.length || isLoading}
+                    className='w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-700 hover:to-blue-700'
+                    size='lg'
+                >
                     {isLoading ? (
                         <>
                             <span className='animate-pulse'>Loading stats...</span>
                         </>
                     ) : (
                         <>
-                            <Zap className='' />
+                            <Zap className='size-4 mr-2' />
                             Compare {users.length} User{users.length !== 1 ? 's' : ''}
                         </>
                     )}
                 </Button>
 
-                <p className=''>
+                <p className='text-xs text-center text-muted-foreground'>
                     <span className='sm:hidden'>
-                        Press <kbd className=''>Enter</kbd> to add users, separate with commas
+                        Press <kbd className='px-1.5 py-0.5 bg-muted rounded text-xs'>Enter</kbd> to add users, separate
+                        with commas
                     </span>
-                    <span className=''>
-                        Press <kbd className=''>Tab</kbd> to add users quickly
+                    <span className='hidden sm:inline'>
+                        Press <kbd className='px-1.5 py-0.5 bg-muted rounded text-xs'>Tab</kbd> to add users quickly
                     </span>
                 </p>
             </div>

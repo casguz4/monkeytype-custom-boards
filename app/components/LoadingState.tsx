@@ -4,12 +4,12 @@ export function LoadingState() {
     const keys = ['W', 'P', 'M'];
 
     return (
-        <div className=''>
-            <div className=''>
+        <div className='flex flex-col items-center justify-center py-20'>
+            <div className='flex gap-3 mb-6'>
                 {keys.map((key, index) => (
                     <motion.div
                         key={key}
-                        className=''
+                        className='size-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg'
                         animate={{
                             y: [0, -20, 0],
                             scale: [1, 1.1, 1],
@@ -20,7 +20,7 @@ export function LoadingState() {
                             delay: index * 0.15,
                         }}
                     >
-                        <span className=''>{key}</span>
+                        <span className='text-2xl text-white'>{key}</span>
                     </motion.div>
                 ))}
             </div>

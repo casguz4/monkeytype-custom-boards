@@ -18,12 +18,14 @@
             ["index", "index-type"],
         ],
     },
-    "experimentalTailwindcss": {
-        "config": "./tailwind.config.js",
-        "stylesheet": "./path/to/stylesheet.css",
-        "attributes": ["class", "className"],
-        "functions": ["clsx", "cn"],
-        "preserveDuplicates": false,
-        "preserveWhitespace": false,
-    },
+    // Disabled: experimentalTailwindcss is incompatible with Tailwind v4 CSS-based config
+    // and strips all className strings when it can't resolve the config.
+    // Re-enable once oxfmt supports Tailwind v4.
+    // "experimentalTailwindcss": {
+    //     "stylesheet": "./app/app.css",
+    //     "attributes": ["class", "className"],
+    //     "functions": ["clsx", "cn"],
+    //     "preserveDuplicates": false,
+    //     "preserveWhitespace": false,
+    // },
 }
