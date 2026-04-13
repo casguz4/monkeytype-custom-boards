@@ -18,26 +18,29 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
     const [error, setError] = useState('');
 
     const addUser = () => {
-        const trimmedValue = inputValue.trim();
+        const names = inputValue
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
 
-        if (!trimmedValue) {
+        if (names.length === 0) {
             setError('Please enter a username');
             return;
         }
 
-        if (users.includes(trimmedValue)) {
-            setError('User already added');
-            return;
+        const newUsers = [...users];
+        for (const name of names) {
+            if (newUsers.includes(name)) continue;
+            if (newUsers.length >= 5) {
+                setError('Maximum 5 users for comparison');
+                break;
+            }
+            newUsers.push(name);
         }
 
-        if (users.length >= 5) {
-            setError('Maximum 5 users for comparison');
-            return;
-        }
-
-        setUsers([...users, trimmedValue]);
+        setUsers(newUsers);
         setInputValue('');
-        setError('');
+        if (newUsers.length <= 5) setError('');
     };
 
     const removeUser = (userToRemove: string) => {
@@ -51,7 +54,11 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
             addUser();
         } else if (e.key === 'Enter') {
             e.preventDefault();
-            handleCompare();
+            if (inputValue.trim()) {
+                addUser();
+            } else {
+                handleCompare();
+            }
         }
     };
 
@@ -95,8 +102,14 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
                         disabled={isLoading}
                         className='flex-1'
                     />
-                    <Button onClick={addUser} disabled={isLoading || users.length >= 5} variant='outline' size='icon'>
-                        <Plus className='size-4' />
+                    <Button
+                        onClick={addUser}
+                        disabled={isLoading || users.length >= 5}
+                        variant='outline'
+                        size='icon'
+                        className=''
+                    >
+                        <Plus className='' />
                     </Button>
                 </div>
 
@@ -134,7 +147,12 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
                 </Button>
 
                 <p className=''>
-                    Press <kbd className=''>Tab</kbd> to add users quickly
+                    <span className='sm:hidden'>
+                        Press <kbd className=''>Enter</kbd> to add users, separate with commas
+                    </span>
+                    <span className=''>
+                        Press <kbd className=''>Tab</kbd> to add users quickly
+                    </span>
                 </p>
             </div>
         </form>
