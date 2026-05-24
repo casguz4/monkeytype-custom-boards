@@ -103,6 +103,7 @@ export function UserInputForm({ onCompare, isLoading }: UserInputFormProps) {
                         className='flex-1'
                     />
                     <Button
+                        type='button'
                         onClick={addUser}
                         disabled={isLoading || users.length >= 5}
                         variant='outline'

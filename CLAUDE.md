@@ -19,6 +19,7 @@ MonkeyType Battle — a web app to compare typing statistics between MonkeyType 
 
 - `pnpm dev` — start dev server
 - `pnpm build` — production build (react-router build)
+- `pnpm run preview` — build then preview locally with Vite
 - `pnpm run check` — full check: typecheck + build + wrangler dry-run deploy
 - `pnpm run typecheck` — runs `cf-typegen` then `oxlint`
 - `pnpm run lint` — oxlint with type-aware checking, zero warnings allowed
@@ -27,6 +28,9 @@ MonkeyType Battle — a web app to compare typing statistics between MonkeyType 
 - `pnpm run format:check` — check formatting without writing
 - `pnpm run deploy` — deploy to Cloudflare Workers via wrangler
 - `pnpm run cf-typegen` — regenerate Cloudflare types + react-router types
+- `pnpm run gen:readme` — auto-generate README via `@stephansama/auto-readme`
+
+No test runner is configured.
 
 ## Architecture
 
@@ -49,3 +53,5 @@ MonkeyType Battle — a web app to compare typing statistics between MonkeyType 
 - MonkeyType API calls happen client-side in the route component, not in a loader
 - User list is synced to `?users=` query param so comparisons are shareable via URL
 - Use `oxlint-disable-next-line` (not eslint-disable) for lint suppressions
+- **oxfmt + Tailwind v4 caveat**: `experimentalTailwindcss` in `.oxfmtrc.jsonc` is disabled because it's incompatible with Tailwind v4's CSS-based config — enabling it will strip all `className` strings to empty `''`. Do not re-enable until oxfmt adds Tailwind v4 support.
+- `format:fix` script in package.json has a typo (`oxmft` instead of `oxfmt`) — use `pnpm run format` instead
