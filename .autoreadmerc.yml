@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=./node_modules/@stephansama/auto-readme/config/schema.yaml
+
+enableUsage: true
+enableToc: true
+disableEmojis: true

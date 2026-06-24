@@ -1,0 +1,34 @@
+- generic [ref=e2]:
+      - banner [ref=e3]:
+            - generic [ref=e4]:
+                  - generic [ref=e5]: ⌨️MonkeyType Battle
+                  - generic [ref=e6]:
+                        - link "MonkeyType.com" [ref=e7] [cursor=pointer]:
+                              - /url: https://monkeytype.com
+                        - link [ref=e8] [cursor=pointer]:
+                              - /url: https://github.com/casguz4/monkeytype-custom-boards
+                              - img
+      - generic [ref=e9]:
+            - region "Notifications alt+T"
+            - main [ref=e10]:
+                  - generic [ref=e12]:
+                        - generic [ref=e13]:
+                              - generic [ref=e14]:
+                                    - img [ref=e15]
+                                    - text: Type Fast. Compare Faster.
+                              - heading "⌨️ MonkeyType Battle" [level=1] [ref=e17]
+                              - paragraph [ref=e18]: See who's the fastest monkey in the jungle
+                        - generic [ref=e19]:
+                              - generic [ref=e20]:
+                                    - textbox "Enter username (e.g., rocket, casguz4)" [ref=e21]
+                                    - button [ref=e22]:
+                                          - img
+                              - button "Compare 0 Users" [disabled]:
+                                    - img
+                                    - text: Compare 0 Users
+                              - paragraph [ref=e23]: Press Tab to add users quickly
+      - contentinfo [ref=e24]:
+            - paragraph [ref=e25]:
+                  - text: © 2026 Monkey Type Custom Boards by
+                  - link "cg4.dev" [ref=e26] [cursor=pointer]:
+                        - /url: https://cg4.dev
